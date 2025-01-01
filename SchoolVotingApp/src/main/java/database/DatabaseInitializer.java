@@ -14,6 +14,15 @@ public class DatabaseInitializer { // AKtualnie pod 0 jest dodany ADMIN Mateusz!
             );
         """;
 
+        String createCandidatesTable = """
+            CREATE TABLE IF NOT EXISTS candidates (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                postulates TEXT NOT NULL,
+                approved BOOLEAN NOT NULL DEFAULT 0
+            );
+        """;
+
         String createVotesTable = """
             CREATE TABLE IF NOT EXISTS votes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,6 +36,7 @@ public class DatabaseInitializer { // AKtualnie pod 0 jest dodany ADMIN Mateusz!
 
             stmt.execute(createUsersTable);
             stmt.execute(createVotesTable);
+            stmt.execute(createCandidatesTable);
 
             System.out.println("Tabele zostały utworzone (jeśli ich wcześniej nie było).");
 

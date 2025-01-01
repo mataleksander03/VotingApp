@@ -67,11 +67,9 @@ public class UserDAO {
 
                 return user;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         // gdy nie znaleziono użytkownika / wystąpił błąd to null
         return null;
     }

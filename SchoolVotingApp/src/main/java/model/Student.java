@@ -1,5 +1,7 @@
 package model;
 
+import database.VoteDAO;
+
 public class Student extends User {
 
     public Student(){ // zeby pokazac
@@ -14,7 +16,10 @@ public class Student extends User {
 
     }
 
-    public void vote(){
-
+    public void vote(int candidateId){
+        boolean rowsAffected =  VoteDAO.updateVote(this.getId(), candidateId);
+        if(!rowsAffected){
+            VoteDAO.addVote(this.getId(), candidateId);
+        }
     }
 }

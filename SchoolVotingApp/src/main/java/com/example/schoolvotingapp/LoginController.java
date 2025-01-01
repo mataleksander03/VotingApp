@@ -36,6 +36,22 @@ public class LoginController {
         stage.show();
     }
 
+    public void openCandidateWindow() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("candidate-view.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loader.load()));
+        stage.setTitle("Panel kandydata");
+        stage.show();
+    }
+
+    public void openStudentWindow() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("student-view.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loader.load()));
+        stage.setTitle("Panel studenta");
+        stage.show();
+    }
+
     public void closeHelloAndLoginWindow() {
         Stage loginStage = (Stage) loginButton.getScene().getWindow(); // scena jak przycisk :o
         loginStage.close();
@@ -55,21 +71,20 @@ public class LoginController {
                 case "ADMIN":
                     openAdminWindow();
                     closeHelloAndLoginWindow();
-                    // ...
                     break;
                 case "STUDENT":
-                    // Przełącz na widok Studenta
-                    // ...
+                    openStudentWindow();
+                    closeHelloAndLoginWindow();
                     break;
                 case "CANDIDATE":
-                    // Przełącz na widok Kandydata
-                    // ...
+                    openCandidateWindow();
+                    closeHelloAndLoginWindow();
                     break;
                 default:
-                    // Komunikat: nieznana rola
+                    System.out.println("Nieznana rola");
             }
         } else {
-            // Wyświetl komunikat o błędzie logowania
+            System.out.println("Błąd - brak użytkownika");
         }
     }
 

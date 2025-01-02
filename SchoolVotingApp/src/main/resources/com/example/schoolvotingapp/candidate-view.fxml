@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.schoolvotingapp.CandidateController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="378.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolvotingapp.CandidateController">
+
+    <VBox layoutX="10.0" layoutY="10.0" spacing="10">
+        <Label fx:id="welcomeLabel" text="Witaj, Imię Kandydata!">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+        <Label fx:id="registrationStatusLabel" text="Status rejestracji: " />
+        <Label fx:id="candidateStatusLabel" text="Status kandydata: " />
+    </VBox>
+
+    <HBox layoutX="7.0" layoutY="100.0" prefHeight="232.0" prefWidth="793.0" spacing="20">
+        <VBox spacing="10">
+            <Label text="Aby zarejestrować się jako kandydat podaj dodatkowe dane:" />
+            <TextField fx:id="phoneNumberField" prefWidth="200.0" promptText="Numer telefonu" />
+            <TextField fx:id="emailField" prefWidth="200.0" promptText="Email" />
+            <TextArea fx:id="reasonTextArea" prefHeight="100.0" prefWidth="200.0" promptText="Dlaczego chcesz zostać przewodniczącym:" />
+            <Button fx:id="registerButton" onAction="#onRegisterCandidacy" prefHeight="25.0" prefWidth="319.0" text="Zarejestruj kandydaturę" />
+        </VBox>
+
+        <VBox prefWidth="200.0" spacing="10">
+            <TextField fx:id="updatePhoneNumberField" prefWidth="200.0" promptText="Nowy numer telefonu" />
+            <TextField fx:id="updateEmailField" prefWidth="200.0" promptText="Nowy email" />
+            <Button fx:id="updateInfoButton" onAction="#onUpdateInfo" prefHeight="25.0" prefWidth="200.0" text="Zaktualizuj informacje" />
+        </VBox>
+
+        <VBox spacing="10">
+            <TextArea fx:id="postulatesTextArea" prefHeight="160.0" prefWidth="220.0" promptText="Edytuj postulaty wyborcze" />
+            <Button fx:id="updatePostulatesButton" onAction="#onUpdatePostulates" prefHeight="25.0" prefWidth="221.0" text="Zaktualizuj postulaty wyborcze" />
+        </VBox>
+    </HBox>
 
 </AnchorPane>

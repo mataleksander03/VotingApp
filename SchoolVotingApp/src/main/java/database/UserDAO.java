@@ -74,4 +74,38 @@ public class UserDAO {
         return null;
     }
 
+
+    public static void updateToCandidate(int id) {
+        String sql = "UPDATE users SET role = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, "CANDIDATE");
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+
+            System.out.println("Użytkownik zmienił status na kandydata!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Błąd podczas update'u użytkownika!");
+        }
+    }
+
+    public static void downgradeToStudent(int id) {
+        String sql = "UPDATE users SET role = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "STUDENT");
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+            System.out.println("Użytkownik zmienił status na studenta!");
+        } catch (SQLException e){
+            e.printStackTrace();
+            System.err.println("Błąd podczas downgrade'u użytkownika!");
+        }
+    }
+
 }

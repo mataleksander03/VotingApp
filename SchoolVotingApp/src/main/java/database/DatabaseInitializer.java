@@ -19,7 +19,10 @@ public class DatabaseInitializer { // AKtualnie pod 0 jest dodany ADMIN Mateusz!
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 postulates TEXT NOT NULL,
-                approved BOOLEAN NOT NULL DEFAULT 0
+                approved BOOLEAN NOT NULL DEFAULT 0,
+                phone_nr TEXT,
+                email TEXT,
+                why_me TEXT
             );
         """;
 

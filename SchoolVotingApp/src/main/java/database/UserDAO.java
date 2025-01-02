@@ -31,17 +31,18 @@ public class UserDAO {
         }
     }
 
-    public static User login(String userID) {
+    public static User login(int userID) {
         String sql = "SELECT * FROM users WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, userID); // od 1 sie zaczuna nie 0!
+            stmt.setInt(1, userID); // od 1 sie zaczuna nie 0!
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 String role = rs.getString("role");
+                int id = rs.getInt("id");
 
                 // AKTUALNIE ZAWSZE USER ALE MOZE BY TRZEBA ZMIENIĆ
                 User user = null;
@@ -51,7 +52,7 @@ public class UserDAO {
                         user = new Student();
                         break;
                     case "CANDIDATE":
-                        user = new Candidate();
+                        user = new Candidate(id);
                         break;
                     case "ADMIN":
                         user = new Admin();
@@ -61,7 +62,7 @@ public class UserDAO {
                         break;
                 }
 
-                user.setId(rs.getInt("id"));
+                user.setId(rs.getInt("id")); // powtarza sie i troche trzeba przerdagowac
                 user.setName(rs.getString("name"));
                 user.setRole(role);
 

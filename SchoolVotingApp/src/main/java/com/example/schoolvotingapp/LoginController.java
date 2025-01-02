@@ -72,7 +72,7 @@ public class LoginController {
     }
 
     public void onHandleLogin(ActionEvent actionEvent) throws IOException {
-        String userID = userIdField.getText();
+        int userID = Integer.parseInt(userIdField.getText());
         User user = UserDAO.login(userID);
 
         if (user != null) {

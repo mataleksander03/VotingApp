@@ -21,7 +21,7 @@ public class Student extends User {
         CandidateDAO.addCandidate(this.getId(), this.getName(), postulates);
         int approved = CandidateDAO.getApprovalStatus(this.getId());
 
-        Candidate candidate = new Candidate();
+        Candidate candidate = new Candidate(this.getId());
         candidate.setId(this.getId());
         candidate.setName(this.getName());
         candidate.setRole("CANDIDATE");

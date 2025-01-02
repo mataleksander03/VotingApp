@@ -1,5 +1,7 @@
 package model;
 
+import database.CandidateDAO;
+
 public class Candidate extends User {
     private String postulates;
     private int approved; // 0-false, 1-true dla zgodności z DB
@@ -7,8 +9,17 @@ public class Candidate extends User {
     private String email;
     private String whyMe;
 
-    public Candidate(){
+    public Candidate(int id){
         System.out.println("Candidate Constructor");
+        this.setId(id);
+        loadCandidateDetails();
+    }
+
+    private void loadCandidateDetails() {
+        String[] details = CandidateDAO.getCandidateDetails(this.getId());
+        this.phoneNr = details[0];
+        this.email = details[1];
+        this.whyMe = details[2];
     }
 
     public void setPhoneNr(String phoneNr) {
@@ -19,7 +30,7 @@ public class Candidate extends User {
         this.email = email;
     }
 
-    public void setWhy_me(String whyMe) {
+    public void setWhyMe(String whyMe) {
         this.whyMe = whyMe;
     }
 
@@ -39,7 +50,7 @@ public class Candidate extends User {
         return email;
     }
 
-    public String getWhMe() {
+    public String getWhyMe() {
         return whyMe;
     }
 

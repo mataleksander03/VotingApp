@@ -36,9 +36,6 @@ public class CandidateDAO {
         } catch(SQLException e) {
             e.printStackTrace();
         }
-
-
-
     }
 
     public static void deleteCandidate(int id) {
@@ -89,5 +86,24 @@ public class CandidateDAO {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static String[] getCandidateDetails(int id) {
+        String sql = "SELECT phone_nr, email, why_me FROM candidates WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                String phone_nr = rs.getString("phone_nr");
+                String email = rs.getString("email");
+                String why_me = rs.getString("why_me");
+                return new String[]{phone_nr, email, why_me};
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new String[]{null, null, null};
     }
 }

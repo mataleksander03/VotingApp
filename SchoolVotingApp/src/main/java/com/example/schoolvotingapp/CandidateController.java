@@ -41,8 +41,9 @@ public class CandidateController {
 
     private void updateRegistrationStatus() {
         if (loggedInCandidate != null) {
-            if (isApproved()) {
+            if (isRegistered()) {
                 registrationStatusLabel.setText("Status rejestracji: Zarejestrowany");
+
             } else {
                 registrationStatusLabel.setText("Status rejestracji: Niezarejestrowany");
             }
@@ -54,7 +55,24 @@ public class CandidateController {
         welcomeLabel.setText("Witaj " + candidate.getName() + "!");
         updateCandidateStatus();
         updateRegistrationStatus();
+        autoFillCandidateDetails();
+    }
 
+    private void autoFillCandidateDetails() {
+        if (loggedInCandidate != null) {
+            if (loggedInCandidate.getPhoneNr() != null) {
+                phoneNumberField.setText(loggedInCandidate.getPhoneNr());
+                phoneNumberField.editableProperty().set(false);
+            }
+            if (loggedInCandidate.getEmail() != null) {
+                emailField.setText(loggedInCandidate.getEmail());
+                emailField.editableProperty().set(false);
+            }
+            if (loggedInCandidate.getWhyMe() != null) {
+                reasonTextArea.setText(loggedInCandidate.getWhyMe());
+                reasonTextArea.editableProperty().set(false);
+            }
+        }
     }
 
     private boolean isApproved(){
@@ -67,16 +85,60 @@ public class CandidateController {
     }
 
     public void onRegisterCandidacy(ActionEvent actionEvent) {
+        if (isRegistered()) {
+            showError("Już jesteś kandydatem!");
+            return;
+        }
 
+        String phoneNumber = phoneNumberField.getText();
+        String email = emailField.getText();
+        String whyMe = reasonTextArea.getText();
+
+        if (phoneNumber.isEmpty() || email.isEmpty() || whyMe.isEmpty()) {
+            showError("Proszę uzupełnić wszystkie pola!");
+            return;
+        }
+
+        CandidateDAO.registerCandidate(loggedInCandidate.getId(), phoneNumber, email, whyMe);
+        loggedInCandidate.setPhoneNr(phoneNumber);
+        loggedInCandidate.setEmail(email);
+        loggedInCandidate.setWhyMe(whyMe);
+        updateRegistrationStatus();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sukces");
+        alert.setHeaderText(null);
+        alert.setContentText("Rejestracja zakończona sukcesem!");
+        alert.showAndWait();
     }
 
     public void onUpdateInfo(ActionEvent actionEvent) {
+        String newPhoneNumber = updatePhoneNumberField.getText();
+        String newEmail = updateEmailField.getText();
+
+        if (newPhoneNumber.isEmpty() || newEmail.isEmpty()) {
+            showError("Proszę uzupełnić wszystkie pola!");
+            return;
+        }
+
+        CandidateDAO.registerCandidate(loggedInCandidate.getId(), newPhoneNumber, newEmail, loggedInCandidate.getWhyMe());
+        loggedInCandidate.setPhoneNr(newPhoneNumber);
+        loggedInCandidate.setEmail(newEmail);
+        refresh();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sukces");
+        alert.setHeaderText(null);
+        alert.setContentText("Informacje zostały zaktualizowane!");
+        alert.showAndWait();
     }
 
     public void onUpdatePostulates(ActionEvent actionEvent) {
     }
 
     void refresh(){
-
+        phoneNumberField.setText(loggedInCandidate.getPhoneNr());
+        emailField.setText(loggedInCandidate.getEmail());
     }
+
 }

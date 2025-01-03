@@ -5,7 +5,7 @@
 
 <GridPane alignment="center" hgap="10" prefHeight="200.0" prefWidth="400.0" vgap="10" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolvotingapp.LoginController">
 
-    <Label text="ID Studenta:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+    <Label text="ID użytkownika:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
     <TextField fx:id="userIdField" onAction="#onStudentId" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
     <Button fx:id="loginButton" onAction="#onHandleLogin" text="Zaloguj się" GridPane.columnIndex="0" GridPane.rowIndex="1" />

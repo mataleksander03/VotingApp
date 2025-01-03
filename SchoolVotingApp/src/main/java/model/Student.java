@@ -3,7 +3,6 @@ package model;
 import database.CandidateDAO;
 import database.UserDAO;
 import database.VoteDAO;
-import java.sql.SQLException;
 
 public class Student extends User {
 
@@ -16,7 +15,7 @@ public class Student extends User {
     }
 
     // zwraca kandydata stworzonego na podstawie studenta - w bazie danych status approved to automatycznie 0
-    public Candidate submitApplication(String postulates) throws SQLException {
+    public Candidate submitApplication(String postulates) {
         UserDAO.updateToCandidate(this.getId());
         CandidateDAO.addCandidate(this.getId(), this.getName(), postulates);
         int approved = CandidateDAO.getApprovalStatus(this.getId());
@@ -31,10 +30,18 @@ public class Student extends User {
         return candidate;
     }
 
-    public void vote(int candidateId){
-        boolean rowsAffected =  VoteDAO.updateVote(this.getId(), candidateId);
-        if(!rowsAffected){
+    public boolean vote(int candidateId){
+        // Sprawdzenie, czy student już głosował na tego kandydata
+        if (VoteDAO.hasVotedForCandidate(this.getId(), candidateId)) {
+            return false; // Student już zagłosował na tego kandydata
+        }
+
+        // Próba zmiany głosu, jeśli głos już istnieje na innego kandydata
+        boolean rowsAffected = VoteDAO.updateVote(this.getId(), candidateId);
+        if (!rowsAffected) {
+            // Jeśli student nie miał wcześniej głosu, dodaj nowy
             VoteDAO.addVote(this.getId(), candidateId);
         }
+        return true; // Głos został oddany lub zaktualizowany
     }
 }

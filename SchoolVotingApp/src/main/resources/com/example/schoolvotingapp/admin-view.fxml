@@ -1,14 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.schoolvotingapp.AdminController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="371.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolvotingapp.AdminController">
+    <VBox layoutX="10.0" layoutY="21.0" prefHeight="325.0" prefWidth="287.0" spacing="10">
+        <Label fx:id="welcomeLabel" text="Witaj, Admin!">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+        <VBox prefHeight="154.0" prefWidth="287.0" spacing="5">
+            <Label text="Zatwierdź oczekujących kandydatów:" />
+            <HBox spacing="10">
+                <ComboBox fx:id="approveCandidatesComboBox" onAction="#onChooseCandidateToApporve" prefHeight="25.0" prefWidth="185.0" />
+                <Button fx:id="approveCandidateButton" onAction="#onApproveChosenCandidate" prefHeight="25.0" prefWidth="163.0" text="Zatwierdź kandydata" />
+            </HBox>
+         <Label text="Dlaczego chce kandydować:" />
+         <TextArea fx:id="whyMeTextArea" prefHeight="200.0" prefWidth="287.0" />
+        </VBox>
+        <VBox spacing="5">
+            <Label text="Odrzuć kandydatów:" />
+            <HBox spacing="10">
+                <ComboBox fx:id="rejectCandidatesComboBox" onAction="#onChooseCandidateToReject" prefHeight="25.0" prefWidth="149.0" />
+                <Button fx:id="rejectCandidateButton" onAction="#onRejectChosenCandidate" prefHeight="25.0" prefWidth="130.0" text="Usuń kandydata" />
+            </HBox>
+        </VBox>
+    </VBox>
+    <VBox layoutX="319.0" layoutY="50.0" prefHeight="297.0" prefWidth="231.0" spacing="10">
+        <Label text="Moderuj postulaty kandydatów:" />
+        <ComboBox fx:id="moderateCandidatesComboBox" onAction="#onChooseToModerateCandidate" prefHeight="25.0" prefWidth="249.0" />
+        <TextArea fx:id="postulatesTextArea" prefHeight="200.0" prefWidth="250.0" />
+        <Button fx:id="saveChangesButton" onAction="#onSaveChanges" prefHeight="25.0" prefWidth="250.0" text="Zapisz zmiany" />
+    </VBox>
+    <VBox layoutX="582.0" layoutY="50.0" prefHeight="253.0" prefWidth="196.0" spacing="10">
+        <Button fx:id="endElectionsButton" onAction="#onEndElection" prefHeight="25.0" prefWidth="198.0" text="Zakończ wybory" />
+        <VBox spacing="5">
+            <Label text="Aktualnie wygrywa:" />
+            <TextField fx:id="leadingCandidateField" />
+        </VBox>
+        <VBox spacing="5">
+            <Label text="Liczba oddanych głosów:" />
+            <TextField fx:id="votesCountField" />
+        </VBox>
+        <VBox spacing="5">
+            <Label text="Liczba uczniów(w tym kandydatów):" />
+            <TextField fx:id="studentsCountField" />
+        </VBox>
+        <VBox spacing="5">
+            <Label text="Liczba kandydatów:" />
+            <TextField fx:id="candidatesCountField" />
+        </VBox>
+    </VBox>
 
 </AnchorPane>

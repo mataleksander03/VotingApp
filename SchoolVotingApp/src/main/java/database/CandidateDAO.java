@@ -1,9 +1,13 @@
 package database;
 
+import model.Candidate;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CandidateDAO {
     public static void addCandidate(int id, String name, String postulates) {
@@ -105,5 +109,33 @@ public class CandidateDAO {
             e.printStackTrace();
         }
         return new String[]{null, null, null};
+    }
+
+    public static List<Candidate> getAllApprovedCandidates() {
+        List<Candidate> candidates = new ArrayList<>();
+        String sql = "SELECT id, name, postulates, approved FROM candidates";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String postulates = rs.getString("postulates");
+                int approved = rs.getInt("approved");
+
+                if(approved == 0) { // KONIECZNIE ZMIENIĆ NA 1!!! (TERAZ TAK TYLKO DO TESTÓW JEST 0!!!)
+                    Candidate candidate = new Candidate(id);
+                    candidate.setName(name);
+                    candidate.setPostulates(postulates);
+                    candidate.setApproved(approved);
+                    candidates.add(candidate);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return candidates;
     }
 }

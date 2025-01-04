@@ -20,6 +20,7 @@ public class Candidate extends User {
         this.phoneNr = details[0];
         this.email = details[1];
         this.whyMe = details[2];
+        this.postulates = details[3];
     }
 
     public void setPhoneNr(String phoneNr) {
@@ -36,6 +37,10 @@ public class Candidate extends User {
 
     public void setPostulates(String postulates) {
         this.postulates = postulates;
+    }
+
+    public void updatePostulates(String postulates) {
+        CandidateDAO.updatePostulates(getId(), postulates);
     }
 
     public void setApproved(Integer approved) {

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VoteDAO {
     public static void addVote(int studentId, int candidateId) {
@@ -47,11 +49,32 @@ public class VoteDAO {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0; // Jeśli wynik > 0, to głos/y istnieje/ą
+                return rs.getInt(1) > 0; // Jeśli wynik > 0, to głos/y istnieje/ą get(count)
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false; // jeśli coś pójdzie nie tak to jakby nie głodował
+    }
+
+    // Metoda do pobierania liczby głosów dla każdego kandydata
+    public static List<String> getVoteResults() {
+        String sql = "SELECT candidate_id, COUNT(*) as vote_count FROM votes GROUP BY candidate_id ORDER BY vote_count DESC";
+        List<String> results = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int candidateId = rs.getInt("candidate_id");
+                int voteCount = rs.getInt("vote_count");
+                results.add("Kandydat ID: " + candidateId + " - Liczba głosów: " + voteCount);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return results;
     }
 }

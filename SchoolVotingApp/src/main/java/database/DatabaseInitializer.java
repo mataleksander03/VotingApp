@@ -34,12 +34,30 @@ public class DatabaseInitializer { // AKtualnie pod 0 jest dodany ADMIN Mateusz!
             );
         """;
 
+        String createElectionStatusTable = """
+            CREATE TABLE IF NOT EXISTS election_status (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                closed BOOLEAN NOT NULL DEFAULT 0
+            );
+        """;
+
+        // default - otwarte = 0
+        String insertDefaultElectionStatus = """
+            INSERT INTO election_status (id, closed)
+                SELECT 1, 0
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM election_status WHERE id = 1
+                );
+        """;
+
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 
             stmt.execute(createUsersTable);
             stmt.execute(createVotesTable);
             stmt.execute(createCandidatesTable);
+            stmt.execute(createElectionStatusTable);
+            stmt.execute(insertDefaultElectionStatus);
 
             System.out.println("Tabele zostały utworzone (jeśli ich wcześniej nie było).");
 

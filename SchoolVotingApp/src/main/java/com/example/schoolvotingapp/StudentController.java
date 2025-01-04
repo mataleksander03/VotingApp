@@ -1,21 +1,15 @@
 package com.example.schoolvotingapp;
 
+import database.ElectionDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Candidate;
 import model.Student;
-
 import java.io.IOException;
-import java.sql.SQLException;
-
 import database.CandidateDAO;
-
-
 
 public class StudentController {
     public Label studentNameLabel;
@@ -27,7 +21,6 @@ public class StudentController {
     public TextArea candidatePostulatesTextArea;
     public Button submitCandidacyButton;
     public ObservableList<Candidate> approvedCandidates = FXCollections.observableArrayList();
-
     private Student loggedInStudent;
 
     public void setLoggedInStudent(Student student) {
@@ -74,16 +67,27 @@ public class StudentController {
     }
 
     public void onCheckResults(ActionEvent actionEvent) {
+        if (ElectionDAO.isElectionClosed()) {
+            // Logika do sprawdzania wyników
+            String results = "Wyniki wyborów: ...";
+            resultTextField.setText(results);
+        } else {
+            showError("Wyniki wyborów będą dostępne po ich zakończeniu.");
+        }
     }
 
-    public void onSubmitCandidacy(ActionEvent actionEvent) throws SQLException, IOException {
-        String postulates = candidatePostulatesTextArea.getText();
-        Candidate loggedInCandidate = loggedInStudent.submitApplication(postulates);
-        LoginController loginController = new LoginController();
-        loginController.openCandidateWindow(loggedInCandidate);
+    public void onSubmitCandidacy(ActionEvent actionEvent) throws IOException {
+        if (candidatePostulatesTextArea.getText().isEmpty()) {
+            showError("Postulaty nie mogą być puste! Powiedz innym dlaczego powinni na ciebie głosować.");
+        } else {
+            String postulates = candidatePostulatesTextArea.getText();
+            Candidate loggedInCandidate = loggedInStudent.submitApplication(postulates);
+            LoginController loginController = new LoginController();
+            loginController.openCandidateWindow(loggedInCandidate);
 //        System.out.println(loggedInCandidate.getApproved());
-        Stage stage = (Stage) submitCandidacyButton.getScene().getWindow();
-        stage.close();
+            Stage stage = (Stage) submitCandidacyButton.getScene().getWindow();
+            stage.close();
+        }
     }
 
     public void onChooseCandidate(ActionEvent actionEvent) {

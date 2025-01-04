@@ -17,7 +17,7 @@
                 <Button fx:id="approveCandidateButton" onAction="#onApproveChosenCandidate" prefHeight="25.0" prefWidth="163.0" text="Zatwierdź kandydata" />
             </HBox>
          <Label text="Dlaczego chce kandydować:" />
-         <TextArea fx:id="whyMeTextArea" prefHeight="200.0" prefWidth="287.0" />
+         <TextArea fx:id="whyMeTextArea" editable="false" prefHeight="200.0" prefWidth="287.0" />
         </VBox>
         <VBox spacing="5">
             <Label text="Odrzuć kandydatów:" />
@@ -35,21 +35,21 @@
     </VBox>
     <VBox layoutX="582.0" layoutY="50.0" prefHeight="253.0" prefWidth="196.0" spacing="10">
         <Button fx:id="endElectionsButton" onAction="#onEndElection" prefHeight="25.0" prefWidth="198.0" text="Zakończ wybory" />
-        <VBox spacing="5">
+        <VBox prefWidth="196.0" spacing="5">
             <Label text="Aktualnie wygrywa:" />
-            <TextField fx:id="leadingCandidateField" />
+            <TextField fx:id="leadingCandidateField" editable="false" prefWidth="196.0" />
         </VBox>
         <VBox spacing="5">
             <Label text="Liczba oddanych głosów:" />
-            <TextField fx:id="votesCountField" />
+            <TextField fx:id="votesCountField" editable="false" />
         </VBox>
         <VBox spacing="5">
             <Label text="Liczba uczniów(w tym kandydatów):" />
-            <TextField fx:id="studentsCountField" />
+            <TextField fx:id="studentsCountField" editable="false" />
         </VBox>
         <VBox spacing="5">
             <Label text="Liczba kandydatów:" />
-            <TextField fx:id="candidatesCountField" />
+            <TextField fx:id="candidatesCountField" editable="false" />
         </VBox>
     </VBox>
 

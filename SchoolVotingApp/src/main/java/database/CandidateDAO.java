@@ -93,22 +93,23 @@ public class CandidateDAO {
     }
 
     public static String[] getCandidateDetails(int id) {
-        String sql = "SELECT phone_nr, email, why_me FROM candidates WHERE id = ?";
+        String sql = "SELECT postulates, phone_nr, email, why_me FROM candidates WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
+                String postulates = rs.getString("postulates");
                 String phone_nr = rs.getString("phone_nr");
                 String email = rs.getString("email");
                 String why_me = rs.getString("why_me");
-                return new String[]{phone_nr, email, why_me};
+                return new String[]{phone_nr, email, why_me, postulates};
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new String[]{null, null, null};
+        return new String[]{null, null, null, null};
     }
 
     public static List<Candidate> getAllApprovedCandidates() {
@@ -137,5 +138,20 @@ public class CandidateDAO {
             e.printStackTrace();
         }
         return candidates;
+    }
+
+    public static void updatePostulates(int id, String postulates) {
+        String sql = "UPDATE candidates SET postulates = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, postulates);
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

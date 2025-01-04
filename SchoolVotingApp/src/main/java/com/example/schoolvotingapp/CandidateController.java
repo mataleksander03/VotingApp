@@ -62,7 +62,7 @@ public class CandidateController {
         if (loggedInCandidate != null) {
             if (loggedInCandidate.getPhoneNr() != null) {
                 phoneNumberField.setText(loggedInCandidate.getPhoneNr());
-                phoneNumberField.editableProperty().set(false);
+                phoneNumberField.editableProperty().set(false); // gdy dostępne dane brak możliwości edycji w GUI
             }
             if (loggedInCandidate.getEmail() != null) {
                 emailField.setText(loggedInCandidate.getEmail());
@@ -71,6 +71,9 @@ public class CandidateController {
             if (loggedInCandidate.getWhyMe() != null) {
                 reasonTextArea.setText(loggedInCandidate.getWhyMe());
                 reasonTextArea.editableProperty().set(false);
+            }
+            if (loggedInCandidate.getPostulates() != null) {
+                postulatesTextArea.setText(loggedInCandidate.getPostulates());
             }
         }
     }
@@ -134,6 +137,17 @@ public class CandidateController {
     }
 
     public void onUpdatePostulates(ActionEvent actionEvent) {
+        String newPostulates = postulatesTextArea.getText();
+        if (newPostulates.isEmpty()) {
+            showError("Postulaty nie mogą być puste! Daj znać innym dlaczego powinni na Ciebie zagłosować.");
+        } else {
+            loggedInCandidate.updatePostulates(newPostulates);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sukces");
+            alert.setHeaderText(null);
+            alert.setContentText("Postulaty zostały zaktualizowane!");
+            alert.showAndWait();
+        }
     }
 
     void refresh(){

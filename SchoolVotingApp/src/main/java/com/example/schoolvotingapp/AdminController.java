@@ -1,8 +1,12 @@
 package com.example.schoolvotingapp;
 
+import database.ElectionDAO;
+import database.VoteDAO;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import model.Admin;
+
+import java.util.List;
 
 public class AdminController {
     public Label welcomeLabel;
@@ -27,6 +31,11 @@ public class AdminController {
         welcomeLabel.setText("Witaj " + admin.getName() + "!");
     }
 
+    private void setLeadingCandidateField(){
+        List<String> candidates = VoteDAO.getVoteResults();
+        leadingCandidateField.setText(candidates.getFirst()); //tylko pierwszy
+    }
+
     public void onChooseCandidateToApporve(ActionEvent actionEvent) {
     }
 
@@ -46,5 +55,11 @@ public class AdminController {
     }
 
     public void onEndElection(ActionEvent actionEvent) {
+        ElectionDAO.closeElection();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Wybory zakończone");
+        alert.setHeaderText(null);
+        alert.setContentText("Wybory są zakończone. Wyniki są dostępne dla studentów.");
+        alert.showAndWait();
     }
 }

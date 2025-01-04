@@ -1,6 +1,7 @@
 package com.example.schoolvotingapp;
 
 import database.CandidateDAO;
+import database.ElectionDAO;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import model.Candidate;
@@ -135,12 +136,16 @@ public class CandidateController {
     }
 
     public void onUpdatePostulates(ActionEvent actionEvent) {
-        String newPostulates = postulatesTextArea.getText();
-        if (newPostulates.isEmpty()) {
-            showError("Postulaty nie mogą być puste! Daj znać innym dlaczego powinni na Ciebie zagłosować.");
+        if(!ElectionDAO.isElectionClosed()) {
+            String newPostulates = postulatesTextArea.getText();
+            if (newPostulates.isEmpty()) {
+                showError("Postulaty nie mogą być puste! Daj znać innym dlaczego powinni na Ciebie zagłosować.");
+            } else {
+                loggedInCandidate.updatePostulates(newPostulates);
+                showAlert("Postulaty zostały zaktualizowane!");
+            }
         } else {
-            loggedInCandidate.updatePostulates(newPostulates);
-            showAlert("Postulaty zostały zaktualizowane!");
+            showError("Wybory już się skończyły!");
         }
     }
 

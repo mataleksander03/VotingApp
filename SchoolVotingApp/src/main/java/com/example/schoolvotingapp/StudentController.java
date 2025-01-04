@@ -92,11 +92,11 @@ public class StudentController {
             if (candidatePostulatesTextArea.getText().isEmpty()) {
                 showError("Postulaty nie mogą być puste! Powiedz innym dlaczego powinni na ciebie głosować.");
             } else {
+                VoteDAO.deleteVote(loggedInStudent.getId());
                 String postulates = candidatePostulatesTextArea.getText();
                 Candidate loggedInCandidate = loggedInStudent.submitApplication(postulates);
                 LoginController loginController = new LoginController();
                 loginController.openCandidateWindow(loggedInCandidate);
-//        System.out.println(loggedInCandidate.getApproved());
                 Stage stage = (Stage) submitCandidacyButton.getScene().getWindow();
                 stage.close();
             }

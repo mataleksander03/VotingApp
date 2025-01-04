@@ -97,4 +97,19 @@ public class VoteDAO {
         return totalVotes;
     }
 
+    public static boolean deleteVote(int studentId) {
+        String sql = "DELETE FROM votes WHERE student_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0; // true jesli coś usuneło
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // false jak error
+        }
+    }
 }

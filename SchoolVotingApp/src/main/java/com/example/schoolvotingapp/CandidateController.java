@@ -29,6 +29,14 @@ public class CandidateController {
         alert.showAndWait();
     }
 
+    public void showAlert(String wiadomosc) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sukces");
+        alert.setHeaderText(null);
+        alert.setContentText(wiadomosc);
+        alert.showAndWait();
+    }
+
     private void updateCandidateStatus() {
         if (loggedInCandidate != null) {
             if (isApproved()) {
@@ -107,12 +115,7 @@ public class CandidateController {
         loggedInCandidate.setEmail(email);
         loggedInCandidate.setWhyMe(whyMe);
         updateRegistrationStatus();
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Sukces");
-        alert.setHeaderText(null);
-        alert.setContentText("Rejestracja zakończona sukcesem!");
-        alert.showAndWait();
+        showAlert("Rejestracja zakończona sukcesem!");
     }
 
     public void onUpdateInfo(ActionEvent actionEvent) {
@@ -128,12 +131,7 @@ public class CandidateController {
         loggedInCandidate.setPhoneNr(newPhoneNumber);
         loggedInCandidate.setEmail(newEmail);
         refresh();
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Sukces");
-        alert.setHeaderText(null);
-        alert.setContentText("Informacje zostały zaktualizowane!");
-        alert.showAndWait();
+        showAlert("Informacje zostały zaktualizowane!");
     }
 
     public void onUpdatePostulates(ActionEvent actionEvent) {
@@ -142,11 +140,7 @@ public class CandidateController {
             showError("Postulaty nie mogą być puste! Daj znać innym dlaczego powinni na Ciebie zagłosować.");
         } else {
             loggedInCandidate.updatePostulates(newPostulates);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Sukces");
-            alert.setHeaderText(null);
-            alert.setContentText("Postulaty zostały zaktualizowane!");
-            alert.showAndWait();
+            showAlert("Postulaty zostały zaktualizowane!");
         }
     }
 
@@ -154,5 +148,4 @@ public class CandidateController {
         phoneNumberField.setText(loggedInCandidate.getPhoneNr());
         emailField.setText(loggedInCandidate.getEmail());
     }
-
 }

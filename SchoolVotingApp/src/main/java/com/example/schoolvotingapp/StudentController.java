@@ -1,6 +1,7 @@
 package com.example.schoolvotingapp;
 
 import database.ElectionDAO;
+import database.VoteDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -53,40 +54,54 @@ public class StudentController {
 
     public void onVote(ActionEvent actionEvent) {
         Candidate chosenCandidate = electionComboBox.getValue();
-        if (chosenCandidate == null) {
-            showError("Nie wybrano kandydata!");
-            return;
-        }
+        if(!ElectionDAO.isElectionClosed()) {
+            if (chosenCandidate == null) {
+                showError("Nie wybrano kandydata!");
+                return;
+            }
 
-        boolean isVoteChanged = loggedInStudent.vote(chosenCandidate.getId());
-        if (isVoteChanged) {
-            showAlert("Głos został oddany.");
+            boolean isVoteChanged = loggedInStudent.vote(chosenCandidate.getId());
+            if (isVoteChanged) {
+                showAlert("Głos został oddany.");
+            } else {
+                showError("Już zagłosowałeś na tego kandydata!");
+            }
         } else {
-            showError("Już zagłosowałeś na tego kandydata!");
+            showError("Wybory są już zakończone!");
         }
     }
 
     public void onCheckResults(ActionEvent actionEvent) {
         if (ElectionDAO.isElectionClosed()) {
-            // Logika do sprawdzania wyników
-            String results = "Wyniki wyborów: ...";
-            resultTextField.setText(results);
+            // Logika do sprawdzania wyników z recyklingiem już stworzonych metod
+            String input = VoteDAO.getVoteResults().getFirst();
+            // indeks pierwszej spacji
+            int startIndex = input.indexOf(" ") + 1;
+            // Pobierz 3 znaki po pierwszej spacji (id zwycięzcy)
+            String id = input.substring(startIndex, Math.min(startIndex + 3, input.length())); // Zapewnia, że nie przekroczymy długości ciągu znaków
+            int CandidateID = Integer.parseInt(id);
+            String result = CandidateDAO.getCandidateName(CandidateID);
+            resultTextField.setText(result);
         } else {
             showError("Wyniki wyborów będą dostępne po ich zakończeniu.");
         }
     }
 
     public void onSubmitCandidacy(ActionEvent actionEvent) throws IOException {
-        if (candidatePostulatesTextArea.getText().isEmpty()) {
-            showError("Postulaty nie mogą być puste! Powiedz innym dlaczego powinni na ciebie głosować.");
-        } else {
-            String postulates = candidatePostulatesTextArea.getText();
-            Candidate loggedInCandidate = loggedInStudent.submitApplication(postulates);
-            LoginController loginController = new LoginController();
-            loginController.openCandidateWindow(loggedInCandidate);
+        if(!ElectionDAO.isElectionClosed()) {
+            if (candidatePostulatesTextArea.getText().isEmpty()) {
+                showError("Postulaty nie mogą być puste! Powiedz innym dlaczego powinni na ciebie głosować.");
+            } else {
+                String postulates = candidatePostulatesTextArea.getText();
+                Candidate loggedInCandidate = loggedInStudent.submitApplication(postulates);
+                LoginController loginController = new LoginController();
+                loginController.openCandidateWindow(loggedInCandidate);
 //        System.out.println(loggedInCandidate.getApproved());
-            Stage stage = (Stage) submitCandidacyButton.getScene().getWindow();
-            stage.close();
+                Stage stage = (Stage) submitCandidacyButton.getScene().getWindow();
+                stage.close();
+            }
+        } else {
+            showError("Wybory są już zakończone!");
         }
     }
 

@@ -39,6 +39,7 @@ public class VoteDAO {
         }
     }
 
+    // Czy dany student zagłosował już na danego kandydata
     public static boolean hasVotedForCandidate(int studentId, int candidateId) {
         String sql = "SELECT COUNT(*) FROM votes WHERE student_id = ? AND candidate_id = ?"; // COUNT zwraca wystąpienia
         try (Connection conn = DatabaseConnection.getConnection();
@@ -69,7 +70,7 @@ public class VoteDAO {
             while (rs.next()) {
                 int candidateId = rs.getInt("candidate_id");
                 int voteCount = rs.getInt("vote_count");
-                results.add("Kandydat ID: " + candidateId + " - Liczba głosów: " + voteCount);
+                results.add("Kandydat: " + candidateId + " - głosy: " + voteCount);
             }
 
         } catch (SQLException e) {
@@ -77,4 +78,23 @@ public class VoteDAO {
         }
         return results;
     }
+
+    // Zwraca liczbe wszytkich oddanych głosów
+    public static int getTotalVotesCount() {
+        String sql = "SELECT COUNT(*) AS total_votes FROM votes";
+        int totalVotes = 0;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                totalVotes = rs.getInt("total_votes");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalVotes;
+    }
+
 }

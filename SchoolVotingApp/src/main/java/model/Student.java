@@ -7,7 +7,7 @@ import database.VoteDAO;
 public class Student extends User {
 
     public Student(){ // zeby pokazac
-        System.out.println("Student constructor");
+        System.out.println("Student created");
     }
 
     public void checkResults(){

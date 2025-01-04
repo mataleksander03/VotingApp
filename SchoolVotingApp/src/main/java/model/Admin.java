@@ -2,6 +2,6 @@ package model;
 
 public class Admin extends User {
     public Admin() {
-        System.out.println("Admin stworzony");
+        System.out.println("Admin created");
     }
 }

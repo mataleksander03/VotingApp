@@ -36,8 +36,8 @@
     <VBox layoutX="582.0" layoutY="50.0" prefHeight="253.0" prefWidth="196.0" spacing="10">
         <Button fx:id="endElectionsButton" onAction="#onEndElection" prefHeight="25.0" prefWidth="198.0" text="Zakończ wybory" />
         <VBox prefWidth="196.0" spacing="5">
-            <Label text="Aktualnie wygrywa:" />
-            <TextField fx:id="leadingCandidateField" editable="false" prefWidth="196.0" />
+            <Label text="Głosy (malejąco):" />
+            <TextArea fx:id="leadingCandidateTextArea" editable="false" prefWidth="196.0" prefHeight="50"/>
         </VBox>
         <VBox spacing="5">
             <Label text="Liczba oddanych głosów:" />
@@ -48,7 +48,7 @@
             <TextField fx:id="studentsCountField" editable="false" />
         </VBox>
         <VBox spacing="5">
-            <Label text="Liczba kandydatów:" />
+            <Label text="Liczba zatwierdzonych kandydatów:" />
             <TextField fx:id="candidatesCountField" editable="false" />
         </VBox>
     </VBox>

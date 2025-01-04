@@ -112,6 +112,7 @@ public class CandidateDAO {
         return new String[]{null, null, null, null};
     }
 
+    // Zwraca liste<Candidate> zatwierdzonych przez admina do kandydowania kandydatów
     public static List<Candidate> getAllApprovedCandidates() {
         List<Candidate> candidates = new ArrayList<>();
         String sql = "SELECT id, name, postulates, approved FROM candidates";
@@ -126,7 +127,36 @@ public class CandidateDAO {
                 String postulates = rs.getString("postulates");
                 int approved = rs.getInt("approved");
 
-                if(approved == 0) { // KONIECZNIE ZMIENIĆ NA 1!!! (TERAZ TAK TYLKO DO TESTÓW JEST 0!!!)
+                if(approved == 1) { // KONIECZNIE ZMIENIĆ NA 1!!! (TERAZ TAK TYLKO DO TESTÓW JEST 0!!!)
+                    Candidate candidate = new Candidate(id);
+                    candidate.setName(name);
+                    candidate.setPostulates(postulates);
+                    candidate.setApproved(approved);
+                    candidates.add(candidate);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return candidates;
+    }
+
+    // Zwraca liste<Candidate> jeszcze NIE zatwierdzonych przez admina do kandydowania kandydatów
+    public static List<Candidate> getAllNotYetApprovedCandidates() {
+        List<Candidate> candidates = new ArrayList<>();
+        String sql = "SELECT id, name, postulates, approved FROM candidates";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String postulates = rs.getString("postulates");
+                int approved = rs.getInt("approved");
+
+                if(approved == 0) {
                     Candidate candidate = new Candidate(id);
                     candidate.setName(name);
                     candidate.setPostulates(postulates);
@@ -153,5 +183,35 @@ public class CandidateDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // Zatwierdza kandydata (admin zatwierdza, że na kandydata można głosować)
+    public static void approveCandidate(int id) {
+        String sql = "UPDATE candidates SET approved = 1 WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getCandidateName(int id) {
+        String sql = "SELECT name FROM candidates WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package model;
 
 import database.CandidateDAO;
+import database.UserDAO;
 
 public class Candidate extends User {
     private String postulates;
@@ -63,16 +64,21 @@ public class Candidate extends User {
         return postulates;
     }
 
-    public Integer getApproved() {
+    public int getApproved() {
         return approved;
     }
 
-    public void approveCandidate() {
+    public int isRegistered() {
+        return CandidateDAO.getRegistartionStatus(this.getId());
+    }
 
+    public void approveCandidate() {
+        CandidateDAO.approveCandidate(this.getId());
     }
 
     public void deleteCandidate() {
-
+        CandidateDAO.deleteCandidate(this.getId());
+        UserDAO.downgradeToStudent(this.getId());
     }
 
     @Override

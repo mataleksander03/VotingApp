@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -12,7 +13,6 @@ import model.Candidate;
 import model.Student;
 import model.User;
 import database.UserDAO;
-
 import java.io.IOException;
 
 
@@ -29,6 +29,14 @@ public class LoginController {
 
     public void setHelloController(HelloController controller) {
         this.helloController = controller;
+    }
+
+    public void showError(String wiadomosc) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText(null);
+        alert.setContentText(wiadomosc);
+        alert.showAndWait();
     }
 
     public void openAdminWindow(Admin admin) throws IOException {
@@ -72,28 +80,32 @@ public class LoginController {
     }
 
     public void onHandleLogin(ActionEvent actionEvent) throws IOException {
-        int userID = Integer.parseInt(userIdField.getText());
-        User user = UserDAO.login(userID);
-
-        if (user != null) {
-            switch (user.getRole()) {
-                case "ADMIN":
-                    openAdminWindow((Admin) user);
-                    closeHelloAndLoginWindow();
-                    break;
-                case "STUDENT":
-                    openStudentWindow((Student) user);
-                    closeHelloAndLoginWindow();
-                    break;
-                case "CANDIDATE":
-                    openCandidateWindow((Candidate) user);
-                    closeHelloAndLoginWindow();
-                    break;
-                default:
-                    System.out.println("Nieznana rola");
-            }
+        if (userIdField.getText().isEmpty()) {
+            showError("Pole id nie może być puste!");
         } else {
-            System.out.println("Błąd - brak użytkownika");
+            int userID = Integer.parseInt(userIdField.getText());
+            User user = UserDAO.login(userID);
+
+            if (user != null) {
+                switch (user.getRole()) {
+                    case "ADMIN":
+                        openAdminWindow((Admin) user);
+                        closeHelloAndLoginWindow();
+                        break;
+                    case "STUDENT":
+                        openStudentWindow((Student) user);
+                        closeHelloAndLoginWindow();
+                        break;
+                    case "CANDIDATE":
+                        openCandidateWindow((Candidate) user);
+                        closeHelloAndLoginWindow();
+                        break;
+                    default:
+                        showError("Nieznana rola");
+                }
+            } else {
+                showError("Błąd logowania. Upewnij się, że twoje dane są poprawne.");
+            }
         }
     }
 

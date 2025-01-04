@@ -4,7 +4,6 @@ import model.Admin;
 import model.Candidate;
 import model.Student;
 import model.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -107,6 +106,26 @@ public class UserDAO {
             e.printStackTrace();
             System.err.println("Błąd podczas downgrade'u użytkownika!");
         }
+    }
+
+    // Zwraca liczbe studentów i kandydatów (studentów, którzy kandydują)
+    public static int getStudentsAndCandidatesCount() {
+        String sql = "SELECT COUNT(*) AS total_users FROM users WHERE role IN ('STUDENT', 'CANDIDATE')";
+        int totalUsers = 0;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                totalUsers = rs.getInt("total_users");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalUsers;
     }
 
 }
